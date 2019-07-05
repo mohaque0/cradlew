@@ -1,16 +1,28 @@
-#include <builder.hpp>
+#include <cradle.hpp>
+
+using namespace cradle;
 
 build_config {
-	auto lib = cpp::static_lib(
-		"static_lib",
-		io::files("test/lib", ".*.cpp"),
-		listOf(io::FILE_LIST, {"."})
-	);
+	auto conan = conan::conan_install()
+			.name("conan")
+			.pathToConanfile(".")
+			.setting(platform::os::is_windows() ? "compiler.runtime=MT" : "")
+			.build();
 
-	auto exe = cpp::exe(
-		"test_main",
-		io::files("main", ".*.cpp", ".*/build.cpp"),
-		listOf(io::FILE_LIST, {}),
-		{lib}
-	);
+	auto lib = cpp::static_lib()
+			.name("static_lib")
+			.sourceFiles(io::FILE_LIST, io::files("lib", ".*.cpp"))
+			.includeSearchDirs({"."})
+			.includeSearchDirs(conan::INCLUDEDIRS, conan)
+			.build();
+
+	auto exe = cpp::exe()
+			.name("test_exec")
+			.sourceFiles(io::FILE_LIST, io::files("main", ".*.cpp", ".*/build.cpp"))
+			.includeSearchDirs(io::FILE_LIST, listOf(io::FILE_LIST, {"."}))
+			.linkLibrary(cpp::LIBRARY_NAME, lib)
+			.linklibrarySearchPath(cpp::LIBRARY_PATH, lib)
+			.linkLibrary(conan::LIBS, conan)
+			.linklibrarySearchPath(conan::LIBDIRS, conan)
+			.build();
 }
