@@ -1,9 +1,10 @@
 #!/bin/sh
 
 VERSION=v0.2-alpha
-DST_DIR=build
+DST_DIR=.cradle
 DST_FILE=$DST_DIR/cradle.hpp
 DST_SHA256="08a98cb5136dbf670a1bc40683c0b6284ac0ce70a2009a9c135bf55f53fd4f97" # Leave empty to ignore
+BUILD_DIR=build
 
 if [ -z "$CXX" ]; then
 	echo "Must define environment variable \$CXX to point a valid compiler."
@@ -11,6 +12,7 @@ if [ -z "$CXX" ]; then
 fi
 
 mkdir -p $DST_DIR
+mkdir -p $BUILD_DIR
 
 if [ ! -f $DST_FILE ]; then
 	wget https://github.com/mohaque0/cradle/releases/download/$VERSION/cradle.hpp -O $DST_FILE
@@ -29,6 +31,6 @@ if [ "$DST_SHA256" != "" ] && [ "$DST_SHA256" != "$actualHash" ]; then
 fi
 
 echo "Compiling Cradle..."
-$CXX -I$DST_DIR build.cpp -std=c++14 -o $DST_DIR/cradle
+$CXX -g -I$DST_DIR build.cpp -std=c++14 -o $BUILD_DIR/cradle
 
-$DST_DIR/cradle $@
+$BUILD_DIR/cradle $@

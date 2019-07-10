@@ -1,10 +1,14 @@
 $VERSION="v0.2-alpha"
-$DST_DIR="build"
+$DST_DIR=".cradle"
 $DST_FILE="$DST_DIR/cradle.hpp"
 $DST_SHA256="08a98cb5136dbf670a1bc40683c0b6284ac0ce70a2009a9c135bf55f53fd4f97" # Leave empty to ignore
+$BUILD_DIR="build"
 
 If (-Not (Test-Path $DST_DIR)) {
 	New-Item -ItemType directory -Path $DST_DIR
+}
+If (-Not (Test-Path $BUILD_DIR)) {
+	New-Item -ItemType directory -Path $BUILD_DIR
 }
 
 If (-Not (Test-Path $DST_FILE)) {
@@ -24,6 +28,6 @@ If ([string]::IsNullOrEmpty($DST_SHA256)) {
 }
 
 Write-Output "Compiling Cradle..."
-iex "cl /I$DST_DIR build.cpp /std:c++14 /Fo:$DST_DIR/build.obj /Fe:$DST_DIR/cradle"
+iex "cl /I$DST_DIR build.cpp /std:c++14 /Fo:$DST_DIR/build.obj /Fe:$BUILD_DIR/cradle"
 
-iex "$DST_DIR\cradle $args"
+iex "$BUILD_DIR\cradle $args"
