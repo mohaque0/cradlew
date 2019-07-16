@@ -1,7 +1,7 @@
-$VERSION="v0.2-alpha"
+$VERSION="v0.3-alpha"
 $DST_DIR=".cradle"
 $DST_FILE="$DST_DIR/cradle.hpp"
-$DST_SHA256="08a98cb5136dbf670a1bc40683c0b6284ac0ce70a2009a9c135bf55f53fd4f97" # Leave empty to ignore
+$DST_SHA256="40f7e6b58aa0946b57ffbe8e87248356d2203f518efdbcb201f0f29e6885319b" # Leave empty to ignore
 $BUILD_DIR="build"
 
 If (-Not (Test-Path $DST_DIR)) {
