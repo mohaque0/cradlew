@@ -30,7 +30,11 @@ if [ "$DST_SHA256" != "" ] && [ "$DST_SHA256" != "$actualHash" ]; then
 	exit
 fi
 
-echo "Compiling Cradle..."
-$CXX -g -I$DST_DIR build.cpp -std=c++14 -o $BUILD_DIR/cradle
+if [ "build.cpp" -nt "$BUILD_DIR/cradle" ]; then
+	echo "Compiling Cradle..."
+	$CXX -g -I$DST_DIR build.cpp -std=c++14 -o $BUILD_DIR/cradle
+else
+	echo "Using existing Cradle executable..."
+fi
 
 $BUILD_DIR/cradle $@
